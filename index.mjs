@@ -12,16 +12,21 @@ let usuarios = [
    {username: "b", avatar:"https://i.imgur.com/AD3MbBi.jpeg"}
 ];
 let tweets = [
-  {username: "a", tweet: "lol"},
-  {username: "a", tweet: "lol"},
-  {username: "a", tweet: "lol",}
 ];
 
 app.post('/sign-up', (req,res) => {
     const { username, avatar } = req.body;
-    usuarios.push({ username, avatar });
-
-  res.status(201).send({ message: "OK" });
+    let already = false;
+    for(const i of usuarios){
+      if(i.username === username){
+        already = true;
+        break;
+      }
+    }
+    if(already === false){
+      usuarios.push({ username, avatar });
+      res.status(201).send({ message: "OK" });
+    }
 })
 
 app.post('/tweets', (req, res) => {
@@ -32,7 +37,7 @@ app.post('/tweets', (req, res) => {
 
 app.get('/tweets', (req, res) => {
   let twt = [];
-  for(let i = 0; i < 3; i++){
+  for(let i = 0; tweets.length < 3 ? i < tweets.length : i < 3; i++){
       let e = tweets.slice().reverse();
       for(const j of usuarios){
         if(j.username === e[i].username){
