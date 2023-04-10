@@ -43,7 +43,14 @@ app.post('/sign-up', (req,res) => {
 
 app.post('/tweets', (req, res) => {
   let correct = false;
-    if("tweet" in req.body){
+  let usercorrect = false;
+  console.log(req.headers.user)
+  for(const i of usuarios){
+    if(i.username === req.headers.user){
+      usercorrect = true;
+    }
+  }
+    if("tweet" in req.body && usercorrect){
       correct = true;
     }
   if(correct === true){
@@ -53,7 +60,7 @@ app.post('/tweets', (req, res) => {
   res.status(201).send({ message: "OK" });
   }
   else{
-    res.sendStatus(400);
+    res.status(401).send({message: "UNAUTHORIZED"})
   }
 })
 
